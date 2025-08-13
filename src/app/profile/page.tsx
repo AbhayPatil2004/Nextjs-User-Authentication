@@ -2,10 +2,14 @@
 
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import Link from "next/link";
+import { useState } from "react";
 
 export default function ProfilePage() {
 
     const router = useRouter();
+
+    const [ data , setData ] = useState("Nothing")
 
     const logOutUser = async () => {
         try {
@@ -16,6 +20,12 @@ export default function ProfilePage() {
         catch (error: any) {
             console.log(error)
         }
+    }
+
+    const getUserDetails = async () => {
+        const data = await axios.get("/api/users/me")
+        console.log(data)
+        setData(data.data.data._id)
     }
 
     return (
@@ -31,6 +41,15 @@ export default function ProfilePage() {
             >
                 Logout
             </button>
+
+            <button
+                onClick={getUserDetails}
+                className="px-6 py-3 text-white rounded-lg shadow-md cursor-pointer"
+            >
+                {data === "Nothing" ? "getUserDetails" : data}
+            </button>
+
+            
         </div>
 
     )
